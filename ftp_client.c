@@ -107,16 +107,25 @@ int main()
                 //attempts to connect to the given socket and returns error if it cannot connect
             case 2: //retrieve
                 printf("retrieve\n");
-		        newsockfd = accept(sockfd,
+                n = read(sockfd, buffer, 255);
+                fp = fopen("returned.txt","w");
+                fprintf(fp,"%s",buffer);
+                printf("created file returned.txt\n")
                 break;
+                
 	        case 3: //store
                 printf("store\n");
                 printf("Enter file name:  \n"); //retrieve filename
                 scanf("%c",&filename);
                 file = fopen(filename, "r");
                 fscanf(file,"%s",buffer); //read file from buffer
-                write(sockfd, buffer, 100); //write file to socket
-                printf("file sent");
+                n = write(sockfd, buffer, 255); //write file to socket
+                if (n<0){
+                    error("ERROR READING FROM SOCKET");
+                }
+                else {
+                    printf("file sent!\n");
+                }
                 break;
             case 4: //quit
                 printf("quit\n");
